@@ -1,1 +1,6 @@
-console.log("working")
+require('dotenv').config();
+const pool = require('./config/db')
+
+
+
+testConnection();
