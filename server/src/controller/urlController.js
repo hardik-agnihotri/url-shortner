@@ -82,7 +82,7 @@ const getAnalytics = async (req, res) => {
         if(result.rows.length > 0){
             return res.status(200).json({Data:result.rows[0] ,message:"Analytics for requested shorcode"})
         }
-        return res.status(404).json({message:"No analtics found"})
+        return res.status(404).json({message:"No analytics found"})
         
     } catch (error) {
         console.error(error);
@@ -91,5 +91,26 @@ const getAnalytics = async (req, res) => {
 };
 
 
+const deleteUrl = async (req, res) => {
+    const { shortCode } = req.params;
+    try {
+        const result = await pool.query(
+            "DELETE FROM urls WHERE short_code = $1 RETURNING *", 
+            [shortCode]
+        );
 
-module.exports = { urlShortner, getRedirect,getAnalytics };
+        if (result.rows.length > 0) {
+            return res.status(200).json({ 
+                message: "URL deleted successfully",
+                deletedData: result.rows[0] 
+            });
+        }
+        
+        return res.status(404).json({ message: "No URL found with that code" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server Error" });
+    }
+};
+
+module.exports = { urlShortner, getRedirect,getAnalytics,deleteUrl };
