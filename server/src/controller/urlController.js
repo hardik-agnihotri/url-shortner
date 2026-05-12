@@ -71,4 +71,25 @@ const getRedirect = async (req, res) => {
     }
 };
 
-module.exports = { urlShortner, getRedirect };
+const getAnalytics = async (req, res) => {
+    const {shortCode} = req.params;
+    
+    try {
+        const result = await pool.query(
+            "SELECT original_url, clicks, created_at FROM urls WHERE short_code = $1",
+            [shortCode]
+        )
+        if(result.rows.length > 0){
+            return res.status(200).json({Data:result.rows[0] ,message:"Analytics for requested shorcode"})
+        }
+        return res.status(404).json({message:"No analtics found"})
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Server Error" });
+    }
+};
+
+
+
+module.exports = { urlShortner, getRedirect,getAnalytics };
