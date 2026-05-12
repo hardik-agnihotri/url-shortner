@@ -1,4 +1,5 @@
 const pool = require('../config/db');
+const redisClient = require('../config/redis');
 
 const urlShortner = async (req, res) => {
     try {
@@ -31,7 +32,14 @@ const getRedirect = async (req, res) => {
     try {
         const { shortCode } = req.params;
 
-
+        const cachedUrl = await redisClient.get(shortCode);
+        if (cachedUrl) {
+            console.log("CACHE HIT: Redirecting from Redis");
+            // Still update analytics in the background (Async)
+            pool.query("UPDATE urls SET clicks = clicks + 1 WHERE short_code = $1", [shortCode]);
+            return res.status(302).redirect(cachedUrl);
+        }
+        console.log("CACHE MISS: Fetching from PostgreSQL");
         const result = await pool.query(
             'SELECT * FROM urls WHERE short_code = $1',
             [shortCode]
@@ -43,7 +51,7 @@ const getRedirect = async (req, res) => {
                 "UPDATE urls SET clicks = clicks + 1 WHERE short_code = $1",
                 [shortCode]
             );
-
+            
             const updated = await pool.query(
                 "SELECT clicks FROM urls WHERE short_code = $1",
                 [shortCode]
@@ -55,7 +63,7 @@ const getRedirect = async (req, res) => {
             if (!targetUrl.startsWith("http")) {
                 targetUrl = `https://${targetUrl}`;
             }
-
+            await redisClient.set(shortCode, targetUrl);
             return res.redirect(targetUrl);
         }
 
