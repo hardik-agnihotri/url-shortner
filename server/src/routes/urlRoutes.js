@@ -1,10 +1,10 @@
 const express = require("express");
-const { urlShortner } = require("../controller/urlController");
+const { urlShortner, getRedirect } = require("../controller/urlController");
 
 const router = express.Router();
 
 router.post("/shorten",urlShortner);
-// router.get("/:shorcode",);
+router.get("/:shortCode",getRedirect);
 // router.get("/analytics/:shortcode",);
 // router.delete("/:shortcode",);
 
