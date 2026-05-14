@@ -63,7 +63,9 @@ const getRedirect = async (req, res) => {
             if (!targetUrl.startsWith("http")) {
                 targetUrl = `https://${targetUrl}`;
             }
-            await redisClient.set(shortCode, targetUrl);
+            await redisClient.set(shortCode, targetUrl,{
+                EX: 43200 
+            });
             return res.redirect(targetUrl);
         }
 
