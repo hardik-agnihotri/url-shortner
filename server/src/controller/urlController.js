@@ -40,24 +40,34 @@ const urlShortner = async (req, res) => {
 const getRedirect = async (req, res) => {
     try {
         const { shortCode } = req.params;
-        const cachedUrl = await redisClient.get(shortCode);
+        
+        const cachedData = await redisClient.get(shortCode);
 
-        let targetUrl = cachedUrl;
-        let urlId = null;
+        let targetUrl;
+        let urlId;
 
-        if (!cachedUrl) {
+        if (cachedData) {
+            const parsedData = JSON.parse(cachedData);
+            targetUrl = parsedData.url;
+            urlId = parsedData.id;
+        } else {
+
             const result = await pool.query('SELECT id, original_url FROM urls WHERE short_code = $1', [shortCode]);
+            
             if (result.rows.length === 0) return res.status(404).json({ message: "Not found" });
             
-            targetUrl = result.rows[0].original_url;
             urlId = result.rows[0].id;
-            await redisClient.set(shortCode, targetUrl, { EX: 86400 });
+            targetUrl = result.rows[0].original_url;
+
+            const dataToCache = JSON.stringify({ id: urlId, url: targetUrl });
+            await redisClient.set(shortCode, dataToCache, { EX: 86400 });
         }
 
         await analyticsQueue.add('trackClick', { 
-            shortCode, 
+            urlId: urlId,
             ip: req.ip,
-            userAgent: req.headers['user-agent']
+            userAgent: req.headers['user-agent'],
+            referrer: req.headers['referer'] || 'Direct'
         });
 
         return res.status(302).redirect(targetUrl);
