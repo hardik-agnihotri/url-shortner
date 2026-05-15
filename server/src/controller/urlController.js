@@ -1,26 +1,33 @@
 const pool = require('../config/db');
 const redisClient = require('../config/redis');
+const { encode } = require('../utils/base62');
 
 const urlShortner = async (req, res) => {
     try {
-        let { original_url } = req.body; // Use 'let' so we can modify it
+        let { original_url } = req.body; 
         if (!original_url) return res.status(400).json({ error: "URL is required" });
 
-        // FIX: Ensure the URL is absolute so res.redirect works correctly later
         if (!original_url.startsWith('http://') && !original_url.startsWith('https://')) {
             original_url = `https://${original_url}`;
         }
 
-        const shortCode = Math.random().toString(36).substring(2, 8);
-
         const result = await pool.query(
-            'INSERT INTO urls (original_url, short_code) VALUES ($1, $2) RETURNING *',
-            [original_url, shortCode]
+            'INSERT INTO urls (original_url) VALUES ($1) RETURNING id',
+            [original_url]
+        );
+
+        const id = result.rows[0].id;
+        
+        const shortCode = encode(id); 
+
+        const finalResult = await pool.query(
+            "UPDATE urls SET short_code = $1 WHERE id = $2 RETURNING *",
+            [shortCode, id]
         );
 
         return res.status(201).json({
             message: "Shortcode has been created",
-            data: result.rows[0]
+            data: finalResult.rows[0] 
         });
     } catch (error) {
         console.error(error);
@@ -35,7 +42,6 @@ const getRedirect = async (req, res) => {
         const cachedUrl = await redisClient.get(shortCode);
         if (cachedUrl) {
             console.log("CACHE HIT: Redirecting from Redis");
-            // Still update analytics in the background (Async)
             pool.query("UPDATE urls SET clicks = clicks + 1 WHERE short_code = $1", [shortCode]);
             return res.status(302).redirect(cachedUrl);
         }
