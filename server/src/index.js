@@ -1,8 +1,8 @@
 require('dotenv').config();
+require('./workers/analyticsWorker');
 const cors = require('cors');
 const express = require('express');
 const url_routes = require("./routes/urlRoutes")
-
 
 const app = express();
 app.use(express.json());
