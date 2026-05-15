@@ -1,13 +1,22 @@
 const { Queue } = require('bullmq');
 const IORedis = require('ioredis');
 
-// BullMQ prefers the 'ioredis' client for its internal operations
 const connection = new IORedis({
-  host: 'localhost',
-  port: 6379,
-  maxRetriesPerRequest: null,   
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
+  maxRetriesPerRequest: null,
 });
 
-const analyticsQueue = new Queue('analytics-queue', { connection });
+connection.on('connect', () => {
+  console.log('BullMQ Redis Connected');
+});
+
+connection.on('error', (err) => {
+  console.log('BullMQ Redis Error:', err);
+});
+
+const analyticsQueue = new Queue('analytics-queue', {
+  connection,
+});
 
 module.exports = { analyticsQueue, connection };
