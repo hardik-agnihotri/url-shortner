@@ -1,0 +1,230 @@
+/* Base Layout & Theme Reset */
+.dashboard-container {
+  min-height: 100vh;
+  background-color: #0f172a; /* Slate 900 */
+  color: #f1f5f9; /* Slate 100 */
+  font-family: system-ui, -apple-system, sans-serif;
+  padding: 2rem 1.5rem;
+}
+
+.dashboard-header {
+  max-w: 1152px;
+  margin: 0 auto 3rem auto;
+}
+
+.brand-title {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #38bdf8; /* Blue 400 */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.brand-subtitle {
+  color: #94a3b8; /* Slate 400 */
+  margin-top: 0.5rem;
+}
+
+/* Responsive Grid Engine */
+.dashboard-grid {
+  max-width: 1152px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Card Foundations */
+.panel-card {
+  background-color: #1e293b; /* Slate 800 */
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Forms & Interactive Inputs */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.input-field {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #0f172a;
+  border: 1px solid #334155;
+  color: #f1f5f9;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  transition: border-color 0.2s;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #2563eb;
+}
+
+.input-field.mono {
+  font-family: monospace;
+}
+
+/* Buttons */
+.btn {
+  width: 100%;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #ffffff;
+}
+
+.btn-blue { background-color: #2563eb; }
+.btn-blue:hover { background-color: #1d4ed8; }
+
+.btn-indigo { background-color: #4f46e5; }
+.btn-indigo:hover { background-color: #4338ca; }
+
+.btn-append {
+  width: auto;
+  white-space: nowrap;
+}
+
+.flex-row-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Feedback & Result UI Components */
+.error-text {
+  color: #f87171;
+  font-size: 0.875rem;
+  margin-top: 0.75rem;
+}
+
+.result-box {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(51, 65, 85, 0.3);
+  border-radius: 0.75rem;
+}
+
+.result-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.interactive-output-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  background-color: #0f172a;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid #334155;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.375rem;
+  border-radius: 0.25rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.icon-btn:hover {
+  background-color: #1e293b;
+  color: #e2e8f0;
+}
+
+/* Live Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.metric-block {
+  background-color: #0f172a;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.metric-value {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #818cf8; /* Indigo 400 */
+  font-family: monospace;
+}
+
+.status-indicator {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #4ade80;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+.pulse-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #22c55e;
+  border-radius: 50%;
+}
+
+.destination-link {
+  color: #38bdf8;
+  text-decoration: none;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  word-break: break-all;
+}
+
+.destination-link:hover {
+  text-decoration: underline;
+}
