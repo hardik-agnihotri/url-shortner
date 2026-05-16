@@ -1,5 +1,6 @@
 require('dotenv').config();
 require('./workers/analyticsWorker');
+require('./workers/cleanupWorker');
 const cors = require('cors');
 const express = require('express');
 const url_routes = require("./routes/urlRoutes")
