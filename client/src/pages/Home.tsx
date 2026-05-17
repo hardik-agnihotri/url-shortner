@@ -49,7 +49,7 @@ export default function App() {
     <div className="dashboard-container">
       <header className="dashboard-header">
         <h1 className="brand-title">
-          <Link2 /> ZipLink Engine
+          <Link2 /> ZipLink
         </h1>
         <p className="brand-subtitle">A high-performance, containerized URL optimization platform.</p>
       </header>

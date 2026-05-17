@@ -1,7 +1,7 @@
 /* Base Layout & Theme Reset */
 .dashboard-container {
   min-height: 100vh;
-  background-color: #0f172a; /* Slate 900 */
+  /* background-color: #0f172a; Slate 900 */
   color: #f1f5f9; /* Slate 100 */
   font-family: system-ui, -apple-system, sans-serif;
   padding: 2rem 1.5rem;
